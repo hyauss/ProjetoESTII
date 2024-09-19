@@ -1,5 +1,6 @@
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 
 public class ArvoreBin {
@@ -111,8 +112,111 @@ public class ArvoreBin {
     System.out.println(sb);
     }
     
-    //Metodo de calc das opeacoes
 
+
+
+//Metodo de calc das opeacoes
+
+// Método para converter uma expressão infixa para pós-fixa
+public static String PassarPosfixa(String expressao) {
+    Stack<Character> stack = new Stack<>();
+    StringBuilder posfix = new StringBuilder();
+    
+    // Remover espaços em branco da expressão
+    expressao = expressao.replaceAll("\\s+", "");
+
+    int i = 0;
+    while (i < expressao.length()) {
+        char token = expressao.charAt(i);
+
+        // Se o caractere é um número ou um ponto (para decimais)
+        if (isNumber(token)) {
+            posfix.append(token);
+
+            // Verifica se há mais dígitos (números ou ponto) para compor o número completo
+            while (i + 1 < expressao.length() && isNumber(expressao.charAt(i + 1))) {
+                posfix.append(expressao.charAt(++i));
+            }
+            posfix.append(" ");  // Adiciona um espaço após o número completo
+        }
+        // Se for um parêntese esquerdo, empilhe-o
+        else if (token == '(') {
+            stack.push(token);
+        }
+        // Se for um parêntese direito, desenpilhe até encontrar o parêntese esquerdo
+        else if (token == ')') {
+            while (!stack.isEmpty() && stack.peek() != '(') {
+                posfix.append(stack.pop()).append(" ");
+            }
+            stack.pop();  // Remove o '(' da pilha
+        }
+        // Se for um operador
+        else if (isOperator(token)) {
+            while (!stack.isEmpty() && precedence(token) <= precedence(stack.peek())) {
+                posfix.append(stack.pop()).append(" ");
+            }
+            stack.push(token);
+        }
+        i++;
+    }
+
+    // Após processar todos os caracteres, esvazie a pilha
+    while (!stack.isEmpty()) {
+        posfix.append(stack.pop()).append(" ");
+    }
+
+    return posfix.toString().trim(); // Retorna a expressão pós-fixa sem espaços extras
+}
+
+// Função para verificar se o caractere é um operador
+private static boolean isOperator(char token) {
+    return token == '+' || token == '-' || token == '*' || token == '/';
+}
+
+// Função para definir a precedência dos operadores
+private static int precedence(char operator) {
+    switch (operator) {
+        case '+':
+        case '-':
+            return 1;
+        case '*':
+        case '/':
+            return 2;
+        default:
+            return 0;
+    }
+}
+
+// Função para verificar se um caractere é um dígito ou um ponto decimal
+private static boolean isNumber(char c) {
+    return Character.isDigit(c) || c == '.';
+}
+
+
+
+    public static Stack<String> colocarPilha(String posfixa){
+        Stack<String> pilha = new Stack<>();
+        
+        // Divide a expressão em tokens
+        String[] tokens = posfixa.split(" ");
+        
+        for (String token : tokens) {
+            // Adiciona cada token à pilha
+            pilha.push(token);
+        }
+        
+        // Exibe os elementos da pilha
+        return pilha;
+    }
+
+    public static void criacaoArvore(Stack<String> pilha){
+        int prioridade = 0;
+        while (!pilha.isEmpty()) {
+    
+
+        }
+
+    }
 
 
 }
