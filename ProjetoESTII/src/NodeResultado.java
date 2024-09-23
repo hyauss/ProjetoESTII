@@ -5,14 +5,17 @@ public class NodeResultado extends Node{
         float operacao=0;
         switch (getData()) {
             case "+": 
-                operacao = Float.parseFloat(getEsquerda().getData()) + Float.parseFloat(getDireita().getData()); 
+                operacao = Float.parseFloat(getEsquerda().getData()) + Float.parseFloat(getDireita().getData());
                 break;
             case "-":
-                operacao = Float.parseFloat(getEsquerda().getData()) - Float.parseFloat(getDireita().getData());                break;
+                operacao = Float.parseFloat(getEsquerda().getData()) - Float.parseFloat(getDireita().getData());
+                break;
             case "/":
-                operacao = Float.parseFloat(getEsquerda().getData()) / Float.parseFloat(getDireita().getData());                break;
+                operacao = Float.parseFloat(getEsquerda().getData()) / Float.parseFloat(getDireita().getData());
+                break;
             case "*":
-                operacao = Float.parseFloat(getEsquerda().getData()) * Float.parseFloat(getDireita().getData());                break;
+                operacao = Float.parseFloat(getEsquerda().getData()) * Float.parseFloat(getDireita().getData());
+                break;
             default:
                 System.out.println("Operador inválido!!");
                 break;

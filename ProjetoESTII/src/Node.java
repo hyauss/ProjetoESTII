@@ -95,7 +95,7 @@ public int getHeight() {
     return 1 + Math.max(alturaEsquerda, alturaDireita);
 }
 
-//Metodos adicional float
+//Metodos adicional float e SB
 
 public float visitar(){
     return Float.NaN;
