@@ -125,26 +125,63 @@ private Node inserir(Node node, String data) {
     if (node == null) {
         return new Node(data, null, null, null);
         //Já tem raiz
-    }else if(node.getDireita()==null){
-        Node novoDireita = new Node(data,null,null,null);
+    }
+
+    if(ValidarExpressao.isOperator(data.charAt(0))){
+    if(node.getDireita()==null){
+        Node novoDireita = inserir(node.getDireita(),data);
         node.setDireita(novoDireita);
         novoDireita.setPai(node);
-        return node;
         //Ja tem raiz e direita não é nula.
-    }else if(ValidarExpressao.isOperator(node.getDireita().getData().charAt(0))){
-        inserir(node.getDireita(),data);
-        //Ja tem raiz, direita não é nula e é um número.
+        
     }else if(node.getEsquerda()==null){
-        Node novoEsquerda =  new Node(data,null,null,null);
+        Node novoEsquerda = inserir(node.getEsquerda(),data);
         node.setEsquerda(novoEsquerda);
         novoEsquerda.setPai(node);
-        return node;
-        //Ja tem raiz, direita não é nula e é um número e esquerda não está vazia.
-    } else if(ValidarExpressao.isOperator(node.getEsquerda().getData().charAt(0))){
-        inserir(node.getEsquerda(),data);
-        
-        //Ja tem raiz, direita não é nula e é um número e esquerda não está vazia e é um número
+    }else if(node.getEsquerda()!=null && ValidarExpressao.isOperator(node.getEsquerda().getData().charAt(0))){
+        Node novoEsquerda = inserir(node.getEsquerda(),data);
+        node.setEsquerda(novoEsquerda);
+        novoEsquerda.setPai(node);
     }
+}else{
+    if(node.getEsquerda()!=null && node.getDireita()!=null){
+    if(ValidarExpressao.isOperator(node.getDireita().getData().charAt(0)) && !ValidarExpressao.isOperator(node.getEsquerda().getData().charAt(0))){
+        Node novoDireita = inserir(node.getDireita(),data);
+        node.setDireita(novoDireita);
+        novoDireita.setPai(node);
+    }else if(ValidarExpressao.isOperator(node.getDireita().getData().charAt(0)) && ValidarExpressao.isOperator(node.getEsquerda().getData().charAt(0))) {
+        Node novoEsquerda = inserir(node.getEsquerda(),data);
+        node.setEsquerda(novoEsquerda);
+        novoEsquerda.setPai(node);
+    }else if(!ValidarExpressao.isOperator(node.getDireita().getData().charAt(0)) && ValidarExpressao.isOperator(node.getEsquerda().getData().charAt(0)) ){
+        Node novoEsquerda = inserir(node.getEsquerda(),data);
+        node.setEsquerda(novoEsquerda);
+        novoEsquerda.setPai(node);
+    }
+}else{
+    if(node.getEsquerda()==null && node.getDireita()==null){
+        Node novoDireita = inserir(node.getDireita(),data);
+        node.setDireita(novoDireita);
+        novoDireita.setPai(node);
+    }else if(node.getDireita()==null){
+        Node novoDireita = inserir(node.getDireita(),data);
+        node.setDireita(novoDireita);
+        novoDireita.setPai(node);
+    }else if(node.getDireita()!=null && ValidarExpressao.isOperator(node.getDireita().getData().charAt(0))){
+        Node novoDireita = inserir(node.getDireita(),data);
+        node.setDireita(novoDireita);
+        novoDireita.setPai(node);
+    }else if(node.getDireita()!=null && !ValidarExpressao.isOperator(node.getDireita().getData().charAt(0)) && node.getEsquerda()==null){
+        Node novoEsquerda = inserir(node.getEsquerda(),data);
+        node.setEsquerda(novoEsquerda);
+        novoEsquerda.setPai(node);
+    }else if(node.getDireita()!=null && !ValidarExpressao.isOperator(node.getDireita().getData().charAt(0)) && ValidarExpressao.isOperator(node.getEsquerda().getData().charAt(0))){
+        Node novoEsquerda = inserir(node.getEsquerda(),data);
+        node.setEsquerda(novoEsquerda);
+        novoEsquerda.setPai(node);
+    }
+}
+}
 
     return node;  // Retorna o nó atualizado
 }
@@ -251,7 +288,7 @@ private static boolean isNumber(char c) {
 
     //Percorre e calcula
 
-    public int calcularExpressao(Node node) {
+    public float calcularExpressao(Node node) {
         // Se o nó for null, retornamos 0 (caso base)
         if (node == null) {
             return 0;
@@ -259,12 +296,12 @@ private static boolean isNumber(char c) {
     
         // Se o nó não é operador (é um número), convertemos a string em número e retornamos
         if (!ValidarExpressao.isOperator(node.getData().charAt(0))) {
-            return Integer.parseInt(node.getData());
+            return Float.parseFloat(node.getData());
         }
     
         // Recursivamente calculamos o valor da subárvore esquerda e direita
-        int esquerda = calcularExpressao(node.getEsquerda());
-        int direita = calcularExpressao(node.getDireita());
+        float esquerda = calcularExpressao(node.getEsquerda());
+        float direita = calcularExpressao(node.getDireita());
     
         // Agora aplicamos o operador armazenado no nó atual aos operandos
         char operador = node.getData().charAt(0);
@@ -276,7 +313,11 @@ private static boolean isNumber(char c) {
             case '*':
                 return esquerda * direita;
             case '/':
+                if(direita!=0){
                 return esquerda / direita;  // Assumimos que divisão por zero já foi tratada
+                }else{
+                System.out.println("Divisão por 0!!");
+                }
             default:
                 throw new IllegalArgumentException("Operador inválido: " + operador);
         }
