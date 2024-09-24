@@ -115,14 +115,10 @@ public class ArvoreBin {
 
 //Metodo adicionais
 
-// Inserir
 // Método para verificar se um caractere é um operador
-private boolean isOperator(char c) {
+private static boolean isOperator(char c) {
     return c == '+' || c == '-' || c == '*' || c == '/';
 }
-
-// Método inserir (ajustado para ser utilizado no construirArvore)
-
 
 // Função para construir a árvore a partir de uma expressão pós-fixa
 public Node construirArvore(String expressao) {
@@ -157,7 +153,7 @@ public Node construirArvore(String expressao) {
     return pilha.pop();
 }
 
-// Método para calcular o valor da árvore
+// Método para calcular o valor da árvore DOUBLE
 public double calcularArvore(Node node) {
     // Se o nó for nulo, retornamos 0
     if (node == null) {
@@ -182,7 +178,11 @@ public double calcularArvore(Node node) {
         case '*':
             return esquerda * direita;
         case '/':
-            return esquerda / direita;
+            if(direita!=0){
+                return esquerda / direita;
+            }
+            System.out.println("\nDivisão por 0!\n");
+            return -999;
         default:
             throw new IllegalArgumentException("Operador desconhecido: " + node.getData());
     }
@@ -222,7 +222,7 @@ public static String PassarPosfixa(String expressao) {
             stack.pop();  // Remove o '(' da pilha
         }
         // Se for um operador
-        else if (isOperator2(token)) {
+        else if (isOperator(token)) {
             while (!stack.isEmpty() && precedence(token) <= precedence(stack.peek())) {
                 posfix.append(stack.pop()).append(" ");
             }
@@ -239,10 +239,6 @@ public static String PassarPosfixa(String expressao) {
     return posfix.toString().trim(); // Retorna a expressão pós-fixa sem espaços extras
 }
 
-//Função para verificar se o caractere é um operador
-private static boolean isOperator2(char token) {
-    return token == '+' || token == '-' || token == '*' || token == '/';
-}
 
 // Função para definir a precedência dos operadores
 private static int precedence(char operator) {
@@ -278,19 +274,8 @@ private static boolean isNumber(char c) {
         return pilha;
     }
 
-  //  public void criacaoArvore(Stack<String> pilha){
-        
-  //      Stack<String> pilhaCerta = new Stack<>();
-  //      while (!pilha.isEmpty()) {
-  //          pilhaCerta.push(pilha.pop());
-  //      }
-  //      while(!pilhaCerta.isEmpty()){
-  //          comecaInserir(pilhaCerta.pop());
-  //      }
 
-  //  }
-
-    //Percorre e calcula
+    //Percorre e calcula FLOAT
 
     public float calcularExpressao(Node node) {
         // Se o nó for null, retornamos 0 (caso base)
@@ -320,8 +305,9 @@ private static boolean isNumber(char c) {
                 if(direita!=0){
                 return esquerda / direita;  // Assumimos que divisão por zero já foi tratada
                 }else{
-                System.out.println("Divisão por 0!!");
-                }
+                System.out.println("\nDivisão por 0!!\n");
+                return -999;
+            }
             default:
                 throw new IllegalArgumentException("Operador inválido: " + operador);
         }
@@ -360,11 +346,5 @@ private void printTree(Node node, StringBuilder sb, String padding, String point
         sb.append(padding).append(pointer).append("null\n");
     }
 }
-
-
-
-
-
-
 
 }

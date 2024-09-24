@@ -35,18 +35,14 @@ public class Main {
                   break;
                 case 2:
                 if(flagCase1 == 1 ){
-                  String posfixa = ArvoreBin.PassarPosfixa(expressao); // PARECE CERTO 💪
-                  //Stack<String> pilha = new Stack<>();
-                  //pilha = ArvoreBin.colocarPilha(posfixa); // PARECE CERTO 💪
-
-                 raiz = arvore.construirArvore(posfixa);
-                 arvore.setRaiz(raiz);
-                
+                  String posfixa = ArvoreBin.PassarPosfixa(expressao);
+                  raiz = arvore.construirArvore(posfixa);
+                  arvore.setRaiz(raiz);
                   System.out.println("\n Árvore criada com sucesso!! \n");
                   //Debug//
                   System.out.println("\n ***DEBUGING*** \n");
                   System.out.println("Expressao: ");
-                  System.out.println(posfixa); // ERRADA
+                  System.out.println(posfixa);
                   System.out.println(arvore);
                     flagCase2=1;
                   }else{
