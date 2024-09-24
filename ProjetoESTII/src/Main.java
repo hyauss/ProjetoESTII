@@ -3,7 +3,7 @@
 //Gabriel Barros Albertini RA: 10419482
 //Rafael de Menezes Rossi RA: 10417954
 import java.util.Scanner;
-import java.util.Stack;
+
 
 
 
@@ -16,6 +16,7 @@ public class Main {
         int flagCase1 =0;
         int flagCase2 =0;
         ArvoreBin arvore = new ArvoreBin();
+        Node raiz = new Node("",null,null,null);
         while(opcao!=5){
             System.out.print("1. Entrada da expressão aritmética na notação infixa.\n2. Criação da árvore binária de expressão aritmética.\n3. Exibição da árvore binária de expressão aritmética.\n4. Cálculo da expressão (realizando o percurso da árvore).\n5. Encerramento do programa.\n" );
             System.out.println("Por favor, digite sua opcao: \n");
@@ -35,10 +36,11 @@ public class Main {
                 case 2:
                 if(flagCase1 == 1 ){
                   String posfixa = ArvoreBin.PassarPosfixa(expressao); // PARECE CERTO 💪
-              
-                  Stack<String> pilha = new Stack<>();
-                  pilha = ArvoreBin.colocarPilha(posfixa); // PARECE CERTO 💪
-                  arvore.criacaoArvore(pilha);
+                  //Stack<String> pilha = new Stack<>();
+                  //pilha = ArvoreBin.colocarPilha(posfixa); // PARECE CERTO 💪
+
+                 raiz = arvore.construirArvore(posfixa);
+                 arvore.setRaiz(raiz);
                 
                   System.out.println("\n Árvore criada com sucesso!! \n");
                   //Debug//
@@ -68,7 +70,7 @@ public class Main {
                   break;
                 case 4:
                 if(flagCase2==1){
-                  float resultado = arvore.calcularExpressao(arvore.getRaiz());
+                  double resultado = arvore.calcularArvore(raiz);
                   System.out.println("\nO resultado percorrendo a àrvore em odem é: "+resultado+"\n");
                 }else{
                   System.out.println("\nÉ necessário criar a àrvore antes, por favor, execute o case 2.\n");

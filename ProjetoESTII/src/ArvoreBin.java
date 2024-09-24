@@ -116,77 +116,77 @@ public class ArvoreBin {
 //Metodo adicionais
 
 // Inserir
-public void comecaInserir(String data) {
-    setRaiz(inserir(getRaiz(), data));
+// Método para verificar se um caractere é um operador
+private boolean isOperator(char c) {
+    return c == '+' || c == '-' || c == '*' || c == '/';
 }
 
-private Node inserir(Node node, String data) {
-    // Se o nó é null, criamos um novo nó com o valor de data
+// Método inserir (ajustado para ser utilizado no construirArvore)
+
+
+// Função para construir a árvore a partir de uma expressão pós-fixa
+public Node construirArvore(String expressao) {
+    Stack<Node> pilha = new Stack<>();
+
+    // Divide a expressão em tokens usando espaço como delimitador
+    String[] tokens = expressao.split(" ");
+
+    for (String token : tokens) {
+        // Se o token for um operando, empilhe-o
+        if (!isOperator(token.charAt(0))) {
+            Node novoOperando = new Node(token,null,null,null);
+            pilha.push(novoOperando);
+        } else {
+            // Se o token for um operador, pop dois operandos da pilha
+            Node operandoDireita = pilha.pop();  // Primeiro pop será o operando direito
+            Node operandoEsquerda = pilha.pop();  // Segundo pop será o operando esquerdo
+
+            // Cria um novo nó com o operador
+            Node operador = new Node(token,null,null,null);
+
+            // Define os filhos esquerdo e direito do nó operador
+            operador.setEsquerda(operandoEsquerda);
+            operador.setDireita(operandoDireita);
+
+            // Empilha o novo nó (subárvore com o operador e operandos)
+            pilha.push(operador);
+        }
+    }
+
+    // O último elemento na pilha será a raiz da árvore
+    return pilha.pop();
+}
+
+// Método para calcular o valor da árvore
+public double calcularArvore(Node node) {
+    // Se o nó for nulo, retornamos 0
     if (node == null) {
-        return new Node(data, null, null, null);
-        //Já tem raiz
+        return 0;
     }
 
-    if(ValidarExpressao.isOperator(data.charAt(0))){
-    if(node.getDireita()==null){
-        Node novoDireita = inserir(node.getDireita(),data);
-        node.setDireita(novoDireita);
-        novoDireita.setPai(node);
-        //Ja tem raiz e direita não é nula.
-        
-    }else if(node.getEsquerda()==null){
-        Node novoEsquerda = inserir(node.getEsquerda(),data);
-        node.setEsquerda(novoEsquerda);
-        novoEsquerda.setPai(node);
-    }else if(node.getEsquerda()!=null && ValidarExpressao.isOperator(node.getEsquerda().getData().charAt(0))){
-        Node novoEsquerda = inserir(node.getEsquerda(),data);
-        node.setEsquerda(novoEsquerda);
-        novoEsquerda.setPai(node);
+    // Se o nó é um operando (número), retornamos seu valor
+    if (!isOperator(node.getData().charAt(0))) {
+        return Double.parseDouble(node.getData());
     }
-}else{
-    if(node.getEsquerda()!=null && node.getDireita()!=null){
-    if(ValidarExpressao.isOperator(node.getDireita().getData().charAt(0)) && !ValidarExpressao.isOperator(node.getEsquerda().getData().charAt(0))){
-        Node novoDireita = inserir(node.getDireita(),data);
-        node.setDireita(novoDireita);
-        novoDireita.setPai(node);
-    }else if(ValidarExpressao.isOperator(node.getDireita().getData().charAt(0)) && ValidarExpressao.isOperator(node.getEsquerda().getData().charAt(0))) {
-        Node novoEsquerda = inserir(node.getEsquerda(),data);
-        node.setEsquerda(novoEsquerda);
-        novoEsquerda.setPai(node);
-    }else if(!ValidarExpressao.isOperator(node.getDireita().getData().charAt(0)) && ValidarExpressao.isOperator(node.getEsquerda().getData().charAt(0)) ){
-        Node novoEsquerda = inserir(node.getEsquerda(),data);
-        node.setEsquerda(novoEsquerda);
-        novoEsquerda.setPai(node);
-    }
-}else{
-    if(node.getEsquerda()==null && node.getDireita()==null){
-        Node novoDireita = inserir(node.getDireita(),data);
-        node.setDireita(novoDireita);
-        novoDireita.setPai(node);
-    }else if(node.getDireita()==null){
-        Node novoDireita = inserir(node.getDireita(),data);
-        node.setDireita(novoDireita);
-        novoDireita.setPai(node);
-    }else if(node.getDireita()!=null && ValidarExpressao.isOperator(node.getDireita().getData().charAt(0))){
-        Node novoDireita = inserir(node.getDireita(),data);
-        node.setDireita(novoDireita);
-        novoDireita.setPai(node);
-    }else if(node.getDireita()!=null && !ValidarExpressao.isOperator(node.getDireita().getData().charAt(0)) && node.getEsquerda()==null){
-        Node novoEsquerda = inserir(node.getEsquerda(),data);
-        node.setEsquerda(novoEsquerda);
-        novoEsquerda.setPai(node);
-    }else if(node.getDireita()!=null && !ValidarExpressao.isOperator(node.getDireita().getData().charAt(0)) && ValidarExpressao.isOperator(node.getEsquerda().getData().charAt(0))){
-        Node novoEsquerda = inserir(node.getEsquerda(),data);
-        node.setEsquerda(novoEsquerda);
-        novoEsquerda.setPai(node);
+
+    // Se o nó é um operador, calculamos recursivamente os filhos
+    double esquerda = calcularArvore(node.getEsquerda());
+    double direita = calcularArvore(node.getDireita());
+
+    // Aplica o operador correspondente e retorna o resultado
+    switch (node.getData().charAt(0)) {
+        case '+':
+            return esquerda + direita;
+        case '-':
+            return esquerda - direita;
+        case '*':
+            return esquerda * direita;
+        case '/':
+            return esquerda / direita;
+        default:
+            throw new IllegalArgumentException("Operador desconhecido: " + node.getData());
     }
 }
-}
-
-    return node;  // Retorna o nó atualizado
-}
-
-
 
 // Método para converter uma expressão infixa para pós-fixa
 public static String PassarPosfixa(String expressao) {
@@ -222,7 +222,7 @@ public static String PassarPosfixa(String expressao) {
             stack.pop();  // Remove o '(' da pilha
         }
         // Se for um operador
-        else if (isOperator(token)) {
+        else if (isOperator2(token)) {
             while (!stack.isEmpty() && precedence(token) <= precedence(stack.peek())) {
                 posfix.append(stack.pop()).append(" ");
             }
@@ -239,8 +239,8 @@ public static String PassarPosfixa(String expressao) {
     return posfix.toString().trim(); // Retorna a expressão pós-fixa sem espaços extras
 }
 
-// Função para verificar se o caractere é um operador
-private static boolean isOperator(char token) {
+//Função para verificar se o caractere é um operador
+private static boolean isOperator2(char token) {
     return token == '+' || token == '-' || token == '*' || token == '/';
 }
 
@@ -278,13 +278,17 @@ private static boolean isNumber(char c) {
         return pilha;
     }
 
-    public void criacaoArvore(Stack<String> pilha){
-        while (!pilha.isEmpty()) {
-            String data =pilha.pop();
-            comecaInserir(data);
-        }
+  //  public void criacaoArvore(Stack<String> pilha){
+        
+  //      Stack<String> pilhaCerta = new Stack<>();
+  //      while (!pilha.isEmpty()) {
+  //          pilhaCerta.push(pilha.pop());
+  //      }
+  //      while(!pilhaCerta.isEmpty()){
+  //          comecaInserir(pilhaCerta.pop());
+  //      }
 
-    }
+  //  }
 
     //Percorre e calcula
 
@@ -348,18 +352,15 @@ private void printTree(Node node, StringBuilder sb, String padding, String point
         String pointerRight = "└──";
 
         // Recursão para filhos esquerdo e direito
-        if (node.getDireita() != null) {
-            printTree(node.getEsquerda(), sb, paddingForBoth, pointerLeft);
-            printTree(node.getDireita(), sb, paddingForBoth, pointerRight);
-        } else {
-            printTree(node.getEsquerda(), sb, paddingForBoth, pointerLeft);
-            sb.append(paddingForBoth).append(pointerRight).append("null\n");
-        }
+        printTree(node.getEsquerda(), sb, paddingForBoth, pointerLeft);
+        printTree(node.getDireita(), sb, paddingForBoth, pointerRight);
+        
     } else {
         // Se o nó for null, imprime null
         sb.append(padding).append(pointer).append("null\n");
     }
 }
+
 
 
 
