@@ -3,7 +3,7 @@
 //Gabriel Barros Albertini 
 //Rafael de Menezes Rossi 
 
-//Referencias: Slides,código feito dos exercícios em aula,StackOverflow,Google e GPT.
+
 
 import java.util.Scanner;
 
