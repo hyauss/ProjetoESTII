@@ -2,9 +2,10 @@
 //Vinicius Alves Marques RA: 10417880
 //Gabriel Barros Albertini RA: 10419482
 //Rafael de Menezes Rossi RA: 10417954
+
+//Referencias: Slides,código feito dos exercícios em aula,StackOverflow,Google e GPT.
+
 import java.util.Scanner;
-
-
 
 
 public class Main {
@@ -31,6 +32,8 @@ public class Main {
                     flagCase1 = 1;
                 } else {
                     System.out.println("\nA expressão é inválida.\n");
+                    flagCase1=0;
+                    flagCase2=0;
                 }
                   break;
                 case 2:

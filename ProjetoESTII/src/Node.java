@@ -97,7 +97,7 @@ public int getHeight() {
 
 //Metodos adicional float e SB
 
-public float visitar(){
+public double visitar(){
     return Float.NaN;
 }
 

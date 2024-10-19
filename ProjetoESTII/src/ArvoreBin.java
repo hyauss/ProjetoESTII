@@ -170,6 +170,7 @@ public double calcularArvore(Node node) {
     double direita = calcularArvore(node.getDireita());
 
     // Aplica o operador correspondente e retorna o resultado
+
     switch (node.getData().charAt(0)) {
         case '+':
             return esquerda + direita;
@@ -258,22 +259,6 @@ private static int precedence(char operator) {
 private static boolean isNumber(char c) {
     return Character.isDigit(c) || c == '.';
 }
-
-    public static Stack<String> colocarPilha(String posfixa){
-        Stack<String> pilha = new Stack<>();
-        
-        // Divide a expressão em tokens
-        String[] tokens = posfixa.split(" ");
-        
-        for (String token : tokens) {
-            // Adiciona cada token à pilha
-            pilha.push(token);
-        }
-        
-        // Exibe os elementos da pilha
-        return pilha;
-    }
-
 
     //Percorre e calcula FLOAT
 
